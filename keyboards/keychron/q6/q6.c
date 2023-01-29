@@ -94,6 +94,42 @@ bool rgb_matrix_indicators_advanced_kb(uint8_t led_min, uint8_t led_max) {
         }
     }
 #    endif // NUM_LOCK_LED_INDEX
+
+    // Layer indicator
+    switch (get_highest_layer(layer_state)) {
+        case 0:
+            rgb_matrix_set_color(16, 80, 80, 80);
+            if (!rgb_matrix_get_flags()) {
+                rgb_matrix_set_color(17, 0, 0, 0);
+                rgb_matrix_set_color(18, 0, 0, 0);
+                rgb_matrix_set_color(19, 0, 0, 0);
+            }
+            break;
+        case 1:
+            rgb_matrix_set_color(17, 80, 80, 80);
+            if (!rgb_matrix_get_flags()) {
+                rgb_matrix_set_color(16, 0, 0, 0);
+                rgb_matrix_set_color(18, 0, 0, 0);
+                rgb_matrix_set_color(19, 0, 0, 0);
+            }
+            break;
+        case 2:
+            rgb_matrix_set_color(18, 80, 80, 80);
+            if (!rgb_matrix_get_flags()) {
+                rgb_matrix_set_color(16, 0, 0, 0);
+                rgb_matrix_set_color(17, 0, 0, 0);
+                rgb_matrix_set_color(19, 0, 0, 0);
+            }
+            break;
+        case 3:
+            rgb_matrix_set_color(19, 80, 80, 80);
+            if (!rgb_matrix_get_flags()) {
+                rgb_matrix_set_color(16, 0, 0, 0);
+                rgb_matrix_set_color(17, 0, 0, 0);
+                rgb_matrix_set_color(18, 0, 0, 0);
+            }
+            break;
+    }
     return true;
 }
 

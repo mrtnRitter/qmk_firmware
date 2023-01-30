@@ -45,7 +45,7 @@
 #define DE_8    KC_8    // 8
 #define DE_9    KC_9    // 9
 #define DE_0    KC_0    // 0
-#define DE_SS   KC_MINS // ß
+#define DE_SZ   KC_MINS // ß
 #define DE_ACUT KC_EQL  // ´ (dead)
 // Row 2
 #define DE_Q    KC_Q    // Q
@@ -58,7 +58,7 @@
 #define DE_I    KC_I    // I
 #define DE_O    KC_O    // O
 #define DE_P    KC_P    // P
-#define DE_UDIA KC_LBRC // Ü
+#define DE_UUML KC_LBRC // Ü
 #define DE_PLUS KC_RBRC // +
 // Row 3
 #define DE_A    KC_A    // A
@@ -70,11 +70,11 @@
 #define DE_J    KC_J    // J
 #define DE_K    KC_K    // K
 #define DE_L    KC_L    // L
-#define DE_ODIA KC_SCLN // Ö
-#define DE_ADIA KC_QUOT // Ä
+#define DE_OUML KC_SCLN // Ö
+#define DE_AUML KC_QUOT // Ä
 #define DE_HASH KC_NUHS // #
 // Row 4
-#define DE_LABK KC_NUBS // <
+#define DE_LRAR KC_NUBS // <
 #define DE_Y    KC_Z    // Y
 #define DE_X    KC_X    // X
 #define DE_C    KC_C    // C

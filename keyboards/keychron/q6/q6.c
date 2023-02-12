@@ -47,26 +47,17 @@ bool dip_switch_update_kb(uint8_t index, bool active) {
 // RGB MATRIX ENABLED
 #if defined(RGB_MATRIX_ENABLE)
 
-// GLOBAL
+// GLOBALS
 uint32_t layer_switch_time;
+uint8_t  layer_indicator_led;
 
-// INIT
-void keyboard_post_init_user(void) {
-    layer_switch_time = timer_read32();
 
-    if (debug_enable) {
-        dprintf("Layer switch time: %lu \n", layer_switch_time);
-    }
-
-}
-
-// EVENT on layer change
+// EVENT on layer change - also runs on init
 layer_state_t layer_state_set_kb(layer_state_t state) {
-    layer_switch_time = timer_read32();
+    layer_switch_time   = timer_read32();
+    rgb_matrix_set_color(layer_indicator_led, 0, 0, 0);
+    layer_indicator_led = 16 + get_highest_layer(state);
 
-    if (debug_enable) {
-        dprintf("Layer switch time: %lu \n", layer_switch_time);
-    }
     return state;
 }
 
@@ -128,35 +119,27 @@ bool rgb_matrix_indicators_advanced_kb(uint8_t led_min, uint8_t led_max) {
     // Layer indicator
 
     if (timer_elapsed32(layer_switch_time) <= 1000) {
-        rgb_matrix_set_color((sync_timer_elapsed32(layer_switch_time)/100), 255, 255, 255);
-        rgb_matrix_set_color((sync_timer_elapsed32(layer_switch_time)/100)+20, 255, 255, 255);
-        rgb_matrix_set_color((sync_timer_elapsed32(layer_switch_time)/100)+40, 255, 255, 255);
-        rgb_matrix_set_color((sync_timer_elapsed32(layer_switch_time)/100)+60, 255, 255, 255);
+
+        uint8_t time_to_val = 0.255f * timer_elapsed32(layer_switch_time); // 0 -> 255
+        HSV     hsv         = rgb_matrix_config.hsv;
+
+        if (rgb_matrix_get_flags()) {
+            if (layer_indicator_led != 19) {
+                hsv.h += rgb_matrix_config.speed;
+            }
+
+            hsv.s = time_to_val;
+
+        } else {
+            hsv.h = 0;
+            hsv.s = 0;
+            hsv.v = 255 - time_to_val;
+        }
+
+        RGB rgb = hsv_to_rgb(hsv);
+        rgb_matrix_set_color(layer_indicator_led, rgb.r, rgb.g, rgb.b);
+
     }
-
-
-    switch (get_highest_layer(layer_state)) {
-        case 0:
-            rgb_matrix_set_color(16, 80, 80, 80);
-            break;
-        case 1:
-            rgb_matrix_set_color(17, 80, 80, 80);
-            break;
-        case 2:
-            rgb_matrix_set_color(18, 80, 80, 80);
-            break;
-        case 3:
-            rgb_matrix_set_color(19, 80, 80, 80);
-            break;
-    }
-
-    if (!rgb_matrix_get_flags()) {
-        rgb_matrix_set_color(16, 0, 0, 0);
-        rgb_matrix_set_color(17, 0, 0, 0);
-        rgb_matrix_set_color(18, 0, 0, 0);
-        rgb_matrix_set_color(19, 0, 0, 0);
-    }
-
     return true;
 }
 #endif
